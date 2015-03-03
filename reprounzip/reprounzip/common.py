@@ -31,7 +31,8 @@ import sys
 import usagestats
 import yaml
 
-from .utils import CommonEqualityMixin, escape, hsize, unicode_
+from .utils import CommonEqualityMixin, escape, hsize, unicode_, \
+    optional_return_type
 
 
 FILE_READ = 0x01
@@ -114,6 +115,10 @@ def read_packages(packages, File=File, Package=Package):
 # 0.6: no change
 
 
+Config = optional_return_type(['runs', 'packages', 'other_files'],
+                              ['additional_patterns'])
+
+
 def load_config(filename, canonical, File=File, Package=Package):
     """Loads a YAML configuration file.
 
@@ -160,14 +165,17 @@ def load_config(filename, canonical, File=File, Package=Package):
     record_usage_package(runs, packages, other_files,
                          pack_id=config.get('pack_id'))
 
+    kwargs = {}
+
     if canonical:
         if 'additional_patterns' in config:
             raise InvalidConfig("Canonical configuration file shouldn't have "
                                 "additional_patterns key anymore")
-        return runs, packages, other_files
     else:
-        additional_patterns = config.get('additional_patterns') or []
-        return runs, packages, other_files, additional_patterns
+        kwargs['additional_patterns'] = config.get('additional_patterns') or []
+
+    return Config(runs, packages, other_files,
+                  **kwargs)
 
 
 def write_file(fp, fi, indent=0):
