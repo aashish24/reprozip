@@ -135,7 +135,8 @@ def directory_create(args):
     tar.extract(member, str(target))
 
     # Loads config
-    runs, packages, other_files = load_config_file(target / 'config.yml', True)
+    config = load_config_file(target / 'config.yml', True)
+    packages = config.packages
 
     target.mkdir()
     root = (target / 'root').absolute()
@@ -192,13 +193,12 @@ def directory_create(args):
         p.wait()
 
     # Original input files, so upload can restore them
-    if any(run['input_files'] for run in runs):  # bad
+    if config.input_files:
         logging.info("Packing up original input files...")
         inputtar = tarfile.open(str(target / 'inputs.tar.gz'), 'w:gz')
-        for run in runs:
-            for ifile in itervalues(run['input_files']):  # bad
-                inputtar.add(str(join_root(root, ifile)),
-                             str(ifile))
+        for ifile in itervalues(config.input_files):
+            inputtar.add(str(join_root(root, ifile)),
+                         str(ifile))
         inputtar.close()
 
     # Meta-data for reprounzip
@@ -410,7 +410,8 @@ def chroot_create(args):
     tar.extract(member, str(target))
 
     # Loads config
-    runs, packages, other_files = load_config_file(target / 'config.yml', True)
+    config = load_config_file(target / 'config.yml', True)
+    packages = config.packages
 
     target.mkdir()
     root = (target / 'root').absolute()
@@ -473,7 +474,7 @@ def chroot_create(args):
         busybox_path = join_root(root, Path('/bin/busybox'))
         busybox_path.parent.mkdir(parents=True)
         with make_dir_writable(join_root(root, Path('/bin'))):
-            download_file(busybox_url(runs[0]['architecture']),
+            download_file(busybox_url(config.runs[0]['architecture']),
                           busybox_path)
             busybox_path.chmod(0o755)
             if not sh_path.lexists():
@@ -484,13 +485,12 @@ def chroot_create(args):
                 env_path.symlink('/bin/busybox')
 
     # Original input files, so upload can restore them
-    if any(run['input_files'] for run in runs):  # bad
+    if config.input_files:
         logging.info("Packing up original input files...")
         inputtar = tarfile.open(str(target / 'inputs.tar.gz'), 'w:gz')
-        for run in runs:
-            for ifile in itervalues(run['input_files']):  # bad
-                inputtar.add(str(join_root(root, ifile)),
-                             str(ifile))
+        for ifile in itervalues(config.input_files):
+            inputtar.add(str(join_root(root, ifile)),
+                         str(ifile))
         inputtar.close()
 
     # Meta-data for reprounzip
