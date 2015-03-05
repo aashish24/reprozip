@@ -150,7 +150,7 @@ class FileUploader(object):
             for i, run in enumerate(runs):
                 if len(runs) > 1:
                     print("  Run %d:" % i)
-                for input_name in run['input_files']:
+                for input_name in run['input_files']:  # bad
                     if self.input_files.get(input_name) is not None:
                         assigned = self.input_files[input_name]
                     else:
@@ -163,7 +163,7 @@ class FileUploader(object):
         # Get the path of each input file
         all_input_files = {}
         for run in runs:
-            all_input_files.update(run['input_files'])
+            all_input_files.update(run['input_files'])  # bad
 
         try:
             # Upload files
@@ -252,7 +252,7 @@ class FileDownloader(object):
             for i, run in enumerate(runs):
                 if len(runs) > 1:
                     print("  Run %d:" % i)
-                for output_name in run['output_files']:
+                for output_name in run['output_files']:  # bad
                     print("    %s" % output_name)
             return
 
@@ -261,7 +261,7 @@ class FileDownloader(object):
         # Get the path of each output file
         all_output_files = {}
         for run in runs:
-            all_output_files.update(run['output_files'])
+            all_output_files.update(run['output_files'])  # bad
 
         try:
             # Download files
