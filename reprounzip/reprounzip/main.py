@@ -14,7 +14,6 @@ It dispatchs to plugins registered through pkg_resources as entry point
 from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
-import codecs
 import locale
 import logging
 from pkg_resources import iter_entry_points
@@ -26,6 +25,7 @@ from reprounzip.common import setup_logging, \
     submit_usage_report, record_usage
 from reprounzip import signals
 from reprounzip.unpackers.common import UsageError
+from reprounzip.utils import StreamWriter
 
 
 __version__ = '0.6'
@@ -77,12 +77,8 @@ def main():
 
     # Encoding for output streams
     if str == bytes:  # PY2
-        writer = codecs.getwriter(locale.getpreferredencoding())
-        o_stdout, o_stderr = sys.stdout, sys.stderr
-        sys.stdout = writer(sys.stdout)
-        sys.stdout.buffer = o_stdout
-        sys.stderr = writer(sys.stderr)
-        sys.stderr.buffer = o_stderr
+        sys.stderr = StreamWriter(sys.stderr)
+        sys.stdout = StreamWriter(sys.stdout)
     else:
         sys.stdin = sys.stdin.buffer
 

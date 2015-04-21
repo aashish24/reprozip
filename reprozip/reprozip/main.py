@@ -13,7 +13,6 @@ It dispatchs to other routines, or handles the testrun command.
 from __future__ import unicode_literals
 
 import argparse
-import codecs
 import locale
 import logging
 import os
@@ -29,7 +28,7 @@ from reprozip.common import setup_logging, \
     submit_usage_report, record_usage
 import reprozip.pack
 import reprozip.tracer.trace
-from reprozip.utils import PY3, unicode_
+from reprozip.utils import PY3, unicode_, StreamWriter
 
 
 def shell_escape(s):
@@ -226,12 +225,8 @@ def main():
 
     # Encoding for output streams
     if str == bytes:  # PY2
-        writer = codecs.getwriter(locale.getpreferredencoding())
-        o_stdout, o_stderr = sys.stdout, sys.stderr
-        sys.stdout = writer(sys.stdout)
-        sys.stdout.buffer = o_stdout
-        sys.stderr = writer(sys.stderr)
-        sys.stderr.buffer = o_stderr
+        sys.stderr = StreamWriter(sys.stderr)
+        sys.stdout = StreamWriter(sys.stdout)
 
     # http://bugs.python.org/issue13676
     # This prevents reprozip from reading argv and envp arrays from trace

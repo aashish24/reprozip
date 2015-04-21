@@ -15,8 +15,10 @@ to this software (more utilities).
 
 from __future__ import unicode_literals
 
+import codecs
 import contextlib
 import email.utils
+import locale
 import logging
 import operator
 import os
@@ -61,6 +63,29 @@ def escape(s):
     This does NOT add quotes around the string.
     """
     return s.replace('\\', '\\\\').replace('"', '\\"')
+
+
+class StreamWriter(object):
+    def __init__(self, stream):
+        writer = codecs.getwriter(locale.getpreferredencoding())
+        self._writer = writer(stream, 'replace')
+        self.buffer = stream
+
+    def writelines(self, lines):
+        self.write(str('').join(lines))
+
+    def write(self, obj):
+        if isinstance(obj, bytes):
+            self.buffer.write(obj)
+        else:
+            self._writer.write(obj)
+
+    def __getattr__(self, name,
+                    getattr=getattr):
+
+        """ Inherit all other methods from the underlying stream.
+        """
+        return getattr(self._writer, name)
 
 
 class CommonEqualityMixin(object):
