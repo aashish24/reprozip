@@ -401,6 +401,9 @@ def write_configuration(directory, sort_packages, overwrite=False):
     input_files = label_files(runs, inputs, 'input')
     output_files = label_files(runs, outputs, 'output')
 
+    # TODO: add executions info to input/output files
+    # Get it from vistrails plugin
+
     save_config(config, runs, packages, files, reprozip_version,
                 input_files, output_files)
 
