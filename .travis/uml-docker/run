@@ -1,8 +1,9 @@
 #!/bin/sh
 
 set -e
-UMLDIR="$(dirname "$0")"
 WORKDIR="$(pwd)"
+cd "$(dirname "$0")"
+UMLDIR="$(pwd)"
 echo "$@" > "${UMLDIR}/.command"
 rm -f "${UMLDIR}/.exit_code"
 
