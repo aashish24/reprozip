@@ -10,7 +10,7 @@ in
         export PYTHONUNBUFFERED=1
         if [ "$TEST_MODE" = "coverage_py" ]; then export COVER="coverage run --append --source=$PWD/reprozip/reprozip,$PWD/reprounzip/reprounzip,$PWD/reprounzip-vagrant/reprounzip --branch"; fi
         if [ $TRAVIS_PYTHON_VERSION = "2.6" ]; then export REPROZIP_PYTHON=/tmp/rpz2.7/bin/python; fi
-        python tests
+        .travis/uml-docker/run python tests --run-docker
         ;;
     check_style)
         flake8 --ignore=E126,E731 reprozip/reprozip reprounzip/reprounzip reprounzip-*/reprounzip
