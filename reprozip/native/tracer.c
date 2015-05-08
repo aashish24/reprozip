@@ -400,7 +400,7 @@ static int trace(pid_t first_proc, int *first_exit_code)
                 /* LCOV_EXCL_END */
             }
 #if defined(I386)
-            if(!process->in_syscall || regs.orig_eax >= 0)
+            if(!process->in_syscall)
                 process->current_syscall = regs.orig_eax;
             if(process->in_syscall)
                 get_i386_reg(&process->retvalue, regs.eax);
@@ -423,7 +423,7 @@ static int trace(pid_t first_proc, int *first_exit_code)
             {
                 /* 32 bit mode */
                 struct i386_regs *x86regs = (struct i386_regs*)&regs;
-                if(!process->in_syscall || x86regs->orig_eax >= 0)
+                if(!process->in_syscall)
                     process->current_syscall = x86regs->orig_eax;
                 if(process->in_syscall)
                     get_i386_reg(&process->retvalue, x86regs->eax);
@@ -441,7 +441,7 @@ static int trace(pid_t first_proc, int *first_exit_code)
             else
             {
                 /* 64 bit mode */
-                if(!process->in_syscall || regs.orig_rax >= 0)
+                if(!process->in_syscall)
                     process->current_syscall = regs.orig_rax;
                 if(process->in_syscall)
                     get_x86_64_reg(&process->retvalue, regs.rax);
