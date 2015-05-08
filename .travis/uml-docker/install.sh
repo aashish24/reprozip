@@ -33,5 +33,5 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 
 # Download binary
-curl -sLo linux https://github.com/jpetazzo/sekexe/raw/master/uml
-chmod +x linux
+curl -sLo .travis/uml-docker/linux https://github.com/jpetazzo/sekexe/raw/master/uml
+chmod +x .travis/uml-docker/linux
