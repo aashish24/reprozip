@@ -34,6 +34,4 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 # Download binary
 curl -sLo linux https://github.com/jpetazzo/sekexe/raw/master/uml
-curl -sLo linux-init https://github.com/moul/travis-docker/raw/master/linux-init
-curl -sLo run https://github.com/moul/travis-docker/raw/master/run
-chmod +x linux linux-init run
+chmod +x linux
