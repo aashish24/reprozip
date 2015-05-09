@@ -8,8 +8,8 @@ export LC_ALL=C
 
 case "$TEST_MODE"
 in
-    run_program|coverage_c|coverage_py)
-        if [ "$TEST_MODE" = "coverage_c" ]; then
+    run_program|coverage)
+        if [ "$TEST_MODE" = "coverage" ]; then
             export CFLAGS="-fprofile-arcs -ftest-coverage"
         fi
         if [ $TRAVIS_PYTHON_VERSION = "2.6" ]; then
@@ -23,8 +23,8 @@ in
         pip install 'git+https://github.com/remram44/rpaths.git#egg=rpaths'
         pip install 'git+https://github.com/remram44/usagestats.git#egg=usagestats'
         if [ $TRAVIS_PYTHON_VERSION = "2.6" ]; then pip install unittest2; fi
-        if [ $TEST_MODE = "coverage_c" ]; then pip install cpp-coveralls; fi
-        if [ $TEST_MODE = "coverage_py" ]; then pip install coveralls; fi
+        if [ $TEST_MODE = "coverage" ]; then pip install cpp-coveralls; fi
+        if [ $TEST_MODE = "coverage" ]; then pip install coveralls; fi
         pip install ./reprozip ./reprounzip ./reprounzip-docker ./reprounzip-vagrant ./reprounzip-vistrails
         ;;
     check_style)
