@@ -23,9 +23,12 @@ in
         pip install 'git+https://github.com/remram44/rpaths.git#egg=rpaths'
         pip install 'git+https://github.com/remram44/usagestats.git#egg=usagestats'
         if [ $TRAVIS_PYTHON_VERSION = "2.6" ]; then pip install unittest2; fi
-        if [ $TEST_MODE = "coverage" ]; then pip install cpp-coveralls; fi
-        if [ $TEST_MODE = "coverage" ]; then pip install coveralls; fi
-        pip install ./reprozip ./reprounzip ./reprounzip-docker ./reprounzip-vagrant ./reprounzip-vistrails
+        if [ $TEST_MODE = "coverage" ]; then
+            pip install coverage coveralls cpp-coveralls
+            pip install -e ./reprozip -e ./reprounzip -e ./reprounzip-docker -e ./reprounzip-vagrant -e ./reprounzip-vistrails
+        else
+            pip install ./reprozip ./reprounzip ./reprounzip-docker ./reprounzip-vagrant ./reprounzip-vistrails
+        fi
         ;;
     check_style)
         pip install flake8
